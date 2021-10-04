@@ -7,10 +7,10 @@ Reference: https://www.infobip.com/docs/api
 
 type infobip struct {
 	BaseUri string
-	ApiKey string
+	ApiKey  string
 }
 
-type IInfobip interface {
+type Infobip interface {
 	SmsTextAdvanced()
 }
 
