@@ -1,9 +1,5 @@
 package commands
 
-/* Example
-This is just an example command for reference
-*/
-
 import (
 	"github.com/go-diary/diary"
 	"github.com/go-uniform/uniform"
@@ -11,17 +7,11 @@ import (
 )
 
 func init() {
-	_base.Subscribe(_base.TargetCommand("ping"), ping)
+	_base.Subscribe(_base.TargetCommand("sms.send"), emailSend)
 }
 
-func ping(r uniform.IRequest, p diary.IPage) {
-	context := diary.M{}
-
-	for key, value := range r.Parameters() {
-		context[key] = value
-	}
-
-	p.Notice("pong", context)
+func smsSend(r uniform.IRequest, p diary.IPage) {
+	// todo: send sms
 
 	if r.CanReply() {
 		if err := r.Reply(uniform.Request{

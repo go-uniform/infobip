@@ -13,7 +13,8 @@ func init() {
 	var rate int
 	var limit int
 	var test bool
-	// todo: add custom flag variables here
+	var baseUri string
+	var apiKey string
 
 	var runCmd = &cobra.Command{
 		Use:   "run",
@@ -30,7 +31,8 @@ func init() {
 				"limit": limit,
 				"test": test,
 
-				// todo: link custom flags to arg values here, example: "custom": custom,
+				"baseUri": baseUri,
+				"apiKey": apiKey,
 			})
 		},
 	}
@@ -40,9 +42,15 @@ func init() {
 	runCmd.Flags().IntVarP(&rate, "rate", "r", 1000, "The sample rate of the trace logs used for performance auditing [set to -1 to log every trace]")
 	runCmd.Flags().IntVarP(&limit, "limit", "x", 1000, "The messages per second that each topic worker will be limited to [set to 0 or less for maximum throughput]")
 	runCmd.Flags().BoolVar(&test, "test", false, "A flag indicating if service should enter into test mode")
-	// todo: add custom CLI flags here
+	runCmd.Flags().StringVar(&baseUri, "baseUri", "", "The Infobip API BaseURI")
+	runCmd.Flags().StringVar(&apiKey, "apiKey", "", "The Infobip API Key")
 
-	// todo: add custom CLI flag validations here
+	if err := runCmd.MarkFlagRequired("baseUri"); err != nil {
+		panic(err)
+	}
+	if err := runCmd.MarkFlagRequired("apiKey"); err != nil {
+		panic(err)
+	}
 
 	_base.RootCmd.AddCommand(runCmd)
 }
