@@ -47,8 +47,8 @@ func TestInfobip_SendEmailSuccess(t *testing.T) {
 	/* Execute */
 	instance := NewInfobipConnector("", "")
 	response := instance.SendEmail(EmailSendRequest{
-		To: []string{ "joan.doe0@example.com" },
-		From: "noreply@uniform.co.za",
+		To:      []string{"joan.doe0@example.com"},
+		From:    "noreply@uniform.co.za",
 		Subject: "Test",
 	})
 
@@ -59,4 +59,36 @@ func TestInfobip_SendEmailSuccess(t *testing.T) {
 	if response.Messages == nil || len(response.Messages) != 1 {
 		// todo: error
 	}
+}
+
+func TestInfobip_SendEmailFail(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_SmsTextAdvancedSuccess(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonCreateSuccess(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonCreateFail(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonUpdateSuccess(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonUpdateFail(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonRemoveSuccess(t *testing.T) {
+	//todo: write test
+}
+
+func TestInfobip_PersonRemoveFail(t *testing.T) {
+	//todo: write test
 }

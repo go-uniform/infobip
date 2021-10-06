@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
@@ -137,6 +136,7 @@ Request
 
 func (i *infobip) SmsTextAdvanced(request SmsTextAdvanceRequest) SmsTextAdvanceResponse {
 
+	/* Create Request */
 	data, err := json.Marshal(request)
 	if err != nil {
 		panic(err)
@@ -156,17 +156,14 @@ func (i *infobip) SmsTextAdvanced(request SmsTextAdvanceRequest) SmsTextAdvanceR
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 
-	res, err := client.Do(req)
-	defer res.Body.Close()
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		panic(err)
-	}
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
+	/* Handle Response */
 	var smsTextAdvanceResponse SmsTextAdvanceResponse
 	var responseErr error
 
-	if res.StatusCode != 200 {
+	if statusCode != 200 {
 		var smsTextAdvanceError SmsTextAdvanceError
 		if err := json.Unmarshal(body, &smsTextAdvanceError); err != nil {
 			responseErr = err

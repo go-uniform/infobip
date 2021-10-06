@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -105,6 +104,7 @@ Request
 
 func (i *infobip) PersonUpdate(request PersonUpdateRequest, queryRequest PersonUpdateQueryRequest) PersonUpdateResponse {
 
+	/* Create Request */
 	uri := fmt.Sprintf("%s/people/2/persons?email=%s", strings.TrimRight(i.BaseUri, "/"), url.QueryEscape(queryRequest.Email))
 	auth := fmt.Sprintf("App %s", i.ApiKey)
 
@@ -120,18 +120,14 @@ func (i *infobip) PersonUpdate(request PersonUpdateRequest, queryRequest PersonU
 	}
 	req.Header.Add("Authorization", auth)
 
-	body := make([]byte, 0)
-	res, err := client.Do(req)
-	defer res.Body.Close()
-	body, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		panic(err)
-	}
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
+	/* Handle Response */
 	var personUpdateResponse PersonUpdateResponse
 	var responseErr error
 
-	if res.StatusCode != 200 {
+	if statusCode != 200 {
 		var personUpdateError PersonUpdateError
 		if err := json.Unmarshal(body, &personUpdateError); err != nil {
 			responseErr = err
