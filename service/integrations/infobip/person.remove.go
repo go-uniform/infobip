@@ -22,7 +22,7 @@ Reference: https://www.infobip.com/docs/api#customer-engagement/people/delete-a-
 PersonRemoveRequest
 */
 
-type PersonRemoveRequest struct {
+type PersonRemoveQueryRequest struct {
 	Phone              string `json:",omitempty"`
 	Email              string `json:",omitempty"`
 	ExternalId         string `json:",omitempty"`
@@ -69,7 +69,7 @@ type PersonRemoveError struct {
 Request
 */
 
-func (i *infobip) PersonRemove(request PersonRemoveRequest) PersonRemoveResponse {
+func (i *infobip) PersonRemove(request PersonRemoveQueryRequest) PersonRemoveResponse {
 
 	uri := fmt.Sprintf("%s/people/2/persons?email=%s", strings.TrimRight(i.BaseUri, "/"), url.QueryEscape(request.Email))
 	auth := fmt.Sprintf("App %s", i.ApiKey)
