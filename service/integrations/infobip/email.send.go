@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"strings"
@@ -111,7 +110,7 @@ Request
 */
 
 func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
-
+	/* Create Request */
 	bodyMultipart := &bytes.Buffer{}
 	writer := multipart.NewWriter(bodyMultipart)
 	if err := writer.WriteField("from", request.From); err != nil {
@@ -143,18 +142,14 @@ func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Add("Accept", "application/json")
 
-	body := make([]byte, 0)
-	res, err := client.Do(req)
-	defer res.Body.Close()
-	body, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		panic(err)
-	}
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
+	/* Handle Response */
 	var emailSendResponse EmailSendResponse
 	var responseErr error
 
-	if res.StatusCode != 200 {
+	if statusCode != 200 {
 		var emailSendError EmailSendError
 		if err := json.Unmarshal(body, &emailSendError); err != nil {
 			responseErr = err

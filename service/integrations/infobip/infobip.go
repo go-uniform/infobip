@@ -10,10 +10,16 @@ type infobip struct {
 	ApiKey  string
 }
 
-type Infobip interface {
-	SmsTextAdvanced()
+type IInfobip interface {
+	SmsTextAdvanced(request SmsTextAdvanceRequest) SmsTextAdvanceResponse
+	PersonCreate(request PersonCreateRequest) PersonCreateResponse
+	PersonRemove(request PersonRemoveRequest) PersonRemoveResponse
+	SendEmail(request EmailSendRequest) EmailSendResponse
 }
 
-func NewInfobipConnector() {
-
+func NewInfobipConnector(baseUri, apiKey string) IInfobip {
+	return &infobip{
+		BaseUri: baseUri,
+		ApiKey: apiKey,
+	}
 }
