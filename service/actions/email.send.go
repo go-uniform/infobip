@@ -13,8 +13,16 @@ func init() {
 }
 
 func emailSend(r uniform.IRequest, p diary.IPage) {
-	var model infobip.EmailSendRequest
-	r.Read(model)
+	var model struct {
+		From        string        `bson:"from"`
+		To          []string      `bson:"to"`
+		Cc          []string      `bson:"cc"`
+		Bcc         []string      `bson:"bcc"`
+		Subject     string        `bson:"subject"`
+		Body        string        `bson:"body"`
+		Attachments []interface{} `bson:"attachments"`
+	}
+	r.Read(&model)
 
 	p.Notice("email.send", nil)
 
@@ -24,7 +32,7 @@ func emailSend(r uniform.IRequest, p diary.IPage) {
 			"to":          model.To,
 			"cc":          model.Cc,
 			"subject":     model.Subject,
-			"body":        model.Text,
+			"body":        model.Body,
 			"attachments": model.Attachments,
 		})
 
@@ -40,7 +48,15 @@ func emailSend(r uniform.IRequest, p diary.IPage) {
 		return
 	}
 
-	info.Infobip.SendEmail(model)
+	info.Infobip.SendEmail(infobip.EmailSendRequest{
+		To:          model.To,
+		Cc:          model.Cc,
+		Bcc:         model.Bcc,
+		From:        model.From,
+		Subject:     model.Subject,
+		Html:        model.Body,
+		Attachments: nil, // todo: handle attachments
+	})
 
 	if r.CanReply() {
 		if err := r.Reply(uniform.Request{

@@ -44,7 +44,7 @@ func TestInfobip_SendEmailSuccess(t *testing.T) {
 	}
 
 	/* Execute */
-	instance := NewInfobipConnector("", "")
+	instance := NewInfobipConnector(nil, "", "")
 	response := instance.SendEmail(EmailSendRequest{
 		To:      []string{"joan.doe0@example.com"},
 		From:    "noreply@uniform.co.za",
@@ -92,7 +92,7 @@ func TestInfobip_SmsTextAdvancedSuccess(t *testing.T) {
 	}
 
 	/* Execute */
-	instance := NewInfobipConnector("", "")
+	instance := NewInfobipConnector(nil, "", "")
 	response := instance.SmsTextAdvanced(SmsTextAdvanceRequest{
 		Messages: []SmsTextAdvanceRequestMessage{
 			{
@@ -147,7 +147,7 @@ func TestInfobip_PersonCreateSuccess(t *testing.T) {
 	}
 
 	/* Execute */
-	instance := NewInfobipConnector("", "")
+	instance := NewInfobipConnector(nil, "", "")
 	response := instance.PersonCreate(PersonCreateRequest{
 		ContactInformation: ContactInformation{
 			Email: []Email{
@@ -194,7 +194,7 @@ func TestInfobip_PersonRemoveSuccess(t *testing.T) {
 	}
 
 	/* Execute */
-	instance := NewInfobipConnector("", "")
+	instance := NewInfobipConnector(nil, "", "")
 	response := instance.PersonRemove(PersonRemoveQueryRequest{
 		Phone: "1234",
 	})

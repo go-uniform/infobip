@@ -25,6 +25,7 @@ func NewInfobipConnector(page diary.IPage, baseUri, apiKey string) IInfobip {
 	var instance IInfobip
 	page.Scope("mongo", func(p diary.IPage) {
 		instance = &infobip{
+			Page:    page,
 			BaseUri: baseUri,
 			ApiKey:  apiKey,
 		}

@@ -117,7 +117,7 @@ func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
 	if err := writer.WriteField("from", request.From); err != nil {
 		panic(err)
 	}
-	if err := writer.WriteField("subject", request.From); err != nil {
+	if err := writer.WriteField("subject", request.Subject); err != nil {
 		panic(err)
 	}
 	for _, to := range request.To {
@@ -129,6 +129,10 @@ func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
 			panic(err)
 		}
 	}
+	if err := writer.WriteField("html", request.Html); err != nil {
+		panic(err)
+	}
+	_ = writer.Close()
 
 	uri := fmt.Sprintf("%s/email/2/send", strings.TrimRight(i.BaseUri, "/"))
 	auth := fmt.Sprintf("App %s", i.ApiKey)

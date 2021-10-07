@@ -13,14 +13,18 @@ func init() {
 }
 
 func smsSend(r uniform.IRequest, p diary.IPage) {
-	var model infobip.SmsTextAdvanceRequest
-	r.Read(model)
+	var model struct {
+		From string   `bson:"from"`
+		To   []string `bson:"to"`
+		Text string   `bson:"text"`
+	}
+	r.Read(&model)
 
-	p.Notice("email.send", nil)
+	p.Notice("sms.send", nil)
 
 	if info.TestMode {
-		p.Notice("email.send.test-mode", diary.M{
-			"messages": model.Messages,
+		p.Notice("sms.send.test-mode", diary.M{
+			"model": model,
 		})
 
 		if r.CanReply() {
@@ -35,7 +39,22 @@ func smsSend(r uniform.IRequest, p diary.IPage) {
 		return
 	}
 
-	info.Infobip.SmsTextAdvanced(model)
+	destinations := make([]infobip.SmsTextAdvanceRequestMessageDestination, 0)
+	for _, to := range model.To {
+		destinations = append(destinations, infobip.SmsTextAdvanceRequestMessageDestination{
+			To: to,
+		})
+	}
+
+	info.Infobip.SmsTextAdvanced(infobip.SmsTextAdvanceRequest{
+		Messages: []infobip.SmsTextAdvanceRequestMessage{
+			{
+				From:         model.From,
+				Destinations: destinations,
+				Text:         model.Text,
+			},
+		},
+	})
 
 	if r.CanReply() {
 		if err := r.Reply(uniform.Request{

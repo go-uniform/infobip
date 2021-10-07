@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"service/cmd/_base"
 	"service/service"
@@ -13,11 +14,13 @@ func init() {
 	var body string
 
 	cmd := _base.Command("sms.send", func(cmd *cobra.Command, args []string) {
-		service.Command("sms.send", time.Second, _base.NatsUri, _base.CompileNatsOptions(), map[string]string{
+		service.Command("sms.send", time.Minute, _base.NatsUri, _base.CompileNatsOptions(), map[string]string{
 			"from": from,
-			"to": to,
+			"to":   to,
 			"body": body,
-		}, nil)
+		}, func(bytes []byte) {
+			fmt.Println(string(bytes))
+		})
 	}, "Send an SMS message to a target mobile number via CLI")
 
 	cmd.Flags().StringVarP(&from, "from", "f", "InfoSMS", "The from number, set this to InfoSMS to send from a long number.")

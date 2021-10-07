@@ -38,7 +38,7 @@ type SmsTextAdvanceRequestMessageDeliveryWindow struct {
 
 type SmsTextAdvanceRequestMessageDestination struct {
 	MessageId string `json:",omitempty"`
-	To        string
+	To        string `json:"to"`
 }
 
 type SmsTextAdvanceRequestMessageLanguage struct {
@@ -57,18 +57,18 @@ type SmsTextAdvanceRequestMessageRegional struct {
 type SmsTextAdvanceRequestMessage struct {
 	CallbackData       string                                      `json:",omitempty"`
 	DeliveryTimeWindow *SmsTextAdvanceRequestMessageDeliveryWindow `json:",omitempty"`
-	Destinations       []SmsTextAdvanceRequestMessageDestination
-	Flash              bool                                  `json:",omitempty"`
-	From               string                                `json:",omitempty"`
-	IntermediateReport bool                                  `json:",omitempty"`
-	Language           *SmsTextAdvanceRequestMessageLanguage `json:",omitempty"`
-	NotifyContentType  string                                `json:",omitempty"`
-	NotifyUrl          string                                `json:",omitempty"`
-	Regional           *SmsTextAdvanceRequestMessageRegional `json:",omitempty"`
-	SendAt             *time.Time                            `json:",omitempty"`
-	Text               string                                `json:",omitempty"`
-	Transliteration    string                                `json:",omitempty"`
-	ValidityPeriod     int64                                 `json:",omitempty"`
+	Destinations       []SmsTextAdvanceRequestMessageDestination   `json:"destinations"`
+	Flash              bool                                        `json:",omitempty"`
+	From               string                                      `json:"from,omitempty"`
+	IntermediateReport bool                                        `json:",omitempty"`
+	Language           *SmsTextAdvanceRequestMessageLanguage       `json:",omitempty"`
+	NotifyContentType  string                                      `json:",omitempty"`
+	NotifyUrl          string                                      `json:",omitempty"`
+	Regional           *SmsTextAdvanceRequestMessageRegional       `json:",omitempty"`
+	SendAt             *time.Time                                  `json:",omitempty"`
+	Text               string                                      `json:"text,omitempty"`
+	Transliteration    string                                      `json:",omitempty"`
+	ValidityPeriod     int64                                       `json:",omitempty"`
 }
 
 type SmsTextAdvanceRequestSendingSpeedLimit struct {
@@ -85,7 +85,7 @@ type SmsTextAdvanceRequestTracking struct {
 
 type SmsTextAdvanceRequest struct {
 	BulkId            string                                  `json:",omitempty"`
-	Messages          []SmsTextAdvanceRequestMessage          `json:",omitempty"`
+	Messages          []SmsTextAdvanceRequestMessage          `json:"messages,omitempty"`
 	SendingSpeedLimit *SmsTextAdvanceRequestSendingSpeedLimit `json:",omitempty"`
 	Tracking          *SmsTextAdvanceRequestTracking          `json:",omitempty"`
 }
