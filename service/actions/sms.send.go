@@ -4,6 +4,8 @@ import (
 	"github.com/go-diary/diary"
 	"github.com/go-uniform/uniform"
 	"service/service/_base"
+	"service/service/info"
+	"service/service/integrations/infobip"
 )
 
 func init() {
@@ -11,13 +13,34 @@ func init() {
 }
 
 func smsSend(r uniform.IRequest, p diary.IPage) {
-	var model interface{}
+	var model infobip.SmsTextAdvanceRequest
 	r.Read(model)
 
-	// todo: call Infobip
+	p.Notice("email.send", nil)
+
+	if info.TestMode {
+		p.Notice("email.send.test-mode", diary.M{
+			"messages": model.Messages,
+		})
+
+		if r.CanReply() {
+			if err := r.Reply(uniform.Request{
+				Model: infobip.SmsTextAdvanceResponse{},
+			}); err != nil {
+				p.Error("reply", err.Error(), diary.M{
+					"err": err,
+				})
+			}
+		}
+		return
+	}
+
+	info.Infobip.SmsTextAdvanced(model)
 
 	if r.CanReply() {
-		if err := r.Reply(uniform.Request{}); err != nil {
+		if err := r.Reply(uniform.Request{
+			Model: infobip.SmsTextAdvanceResponse{},
+		}); err != nil {
 			p.Error("reply", err.Error(), diary.M{
 				"err": err,
 			})

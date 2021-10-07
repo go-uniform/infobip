@@ -1,11 +1,14 @@
 package infobip
 
+import "github.com/go-diary/diary"
+
 /* Infobip API
 
 Reference: https://www.infobip.com/docs/api
 */
 
 type infobip struct {
+	Page    diary.IPage
 	BaseUri string
 	ApiKey  string
 }
@@ -18,9 +21,13 @@ type IInfobip interface {
 	SendEmail(request EmailSendRequest) EmailSendResponse
 }
 
-func NewInfobipConnector(baseUri, apiKey string) IInfobip {
-	return &infobip{
-		BaseUri: baseUri,
-		ApiKey:  apiKey,
-	}
+func NewInfobipConnector(page diary.IPage, baseUri, apiKey string) IInfobip {
+	var instance IInfobip
+	page.Scope("mongo", func(p diary.IPage) {
+		instance = &infobip{
+			BaseUri: baseUri,
+			ApiKey:  apiKey,
+		}
+	})
+	return instance
 }

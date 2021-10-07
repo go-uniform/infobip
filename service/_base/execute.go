@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, runBefore func(shutdown chan bool, group *sync.WaitGroup, p diary.IPage), runAfter func(shutdown chan bool, group *sync.WaitGroup, p diary.IPage), ) {
+func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, runBefore func(shutdown chan bool, group *sync.WaitGroup, p diary.IPage), runAfter func(shutdown chan bool, group *sync.WaitGroup, p diary.IPage)) {
 	// set rate limiting duration using limit arg
 	rateLimit := time.Nanosecond
 	if limit > 0 && limit < 1000000 {
@@ -24,7 +24,7 @@ func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, ru
 	}
 
 	// set global testMode flag based on test arg
-	testMode = test
+	info.TestMode = test
 
 	// connect to nats backbone
 	natsConn, err := nats.Connect(natsUri, natsOptions...)
@@ -46,14 +46,14 @@ func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, ru
 		group := &sync.WaitGroup{}
 
 		p.Notice("startup", diary.M{
-			"nats": info.Args["nats"],
-			"natsCert": info.Args["natsCert"],
-			"natsKey": info.Args["natsKey"],
+			"nats":       info.Args["nats"],
+			"natsCert":   info.Args["natsCert"],
+			"natsKey":    info.Args["natsKey"],
 			"disableTls": info.Args["disableTls"],
-			"lvl": info.Args["lvl"],
-			"rate": info.Args["rate"],
-			"limit": info.Args["limit"],
-			"test": info.Args["test"],
+			"lvl":        info.Args["lvl"],
+			"rate":       info.Args["rate"],
+			"limit":      info.Args["limit"],
+			"test":       info.Args["test"],
 		})
 
 		// service custom run routine before subscribing actions
@@ -85,7 +85,7 @@ func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, ru
 
 		// subscribe all actions [service specific]
 		for topic, handler := range actions {
-			if !strings.HasPrefix(topic, info.AppService+ ".") {
+			if !strings.HasPrefix(topic, info.AppService+".") {
 				// skip all non-routine topics
 				continue
 			}
@@ -158,10 +158,10 @@ func Execute(limit int, test bool, natsUri string, natsOptions []nats.Option, ru
 		}
 
 		p.Notice("unsubscribe.all", diary.M{
-			"topics.actions": reflect.ValueOf(actions).MapKeys(),
+			"topics.actions":       reflect.ValueOf(actions).MapKeys(),
 			"topics.subscriptions": reflect.ValueOf(subscriptions).MapKeys(),
-			"count.actions": len(actions),
-			"count.subscriptions": len(subscriptions),
+			"count.actions":        len(actions),
+			"count.subscriptions":  len(subscriptions),
 		})
 
 		// unsubscribe all actions
