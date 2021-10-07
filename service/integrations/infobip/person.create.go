@@ -38,12 +38,16 @@ type PersonCreateRequest struct {
 }
 
 type ContactInformation struct {
-	Email []struct {
-		Address string
-	}
-	Phone []struct {
-		Number string
-	}
+	Email []Email
+	Phone []Phone
+}
+
+type Email struct {
+	Address string
+}
+
+type Phone struct {
+	Number string
 }
 
 /*
