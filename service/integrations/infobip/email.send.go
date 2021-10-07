@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-diary/diary"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -141,6 +142,15 @@ func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
 	req.Header.Add("Authorization", auth)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	req.Header.Add("Accept", "application/json")
+
+	i.Page.Debug("infobip.send-email", diary.M{
+		"method": "POST",
+		"uri":    uri,
+		"body":   request,
+		"headers": map[string][]string{
+			"Authorization": {auth},
+		},
+	})
 
 	/* Execute Request */
 	body, statusCode, err := executeRequest(client, req)

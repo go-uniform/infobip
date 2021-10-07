@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-diary/diary"
 	"net/http"
 	"strings"
 )
@@ -111,6 +112,15 @@ func (i *infobip) PersonCreate(request PersonCreateRequest) PersonCreateResponse
 		fmt.Println(err)
 	}
 	req.Header.Add("Authorization", auth)
+
+	i.Page.Debug("infobip.person-create", diary.M{
+		"method": "POST",
+		"uri":    uri,
+		"body":   request,
+		"headers": map[string][]string{
+			"Authorization": {auth},
+		},
+	})
 
 	/* Execute Request */
 	body, statusCode, err := executeRequest(client, req)

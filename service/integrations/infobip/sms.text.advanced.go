@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-diary/diary"
 	"net/http"
 	"strings"
 	"time"
@@ -155,6 +156,15 @@ func (i *infobip) SmsTextAdvanced(request SmsTextAdvanceRequest) SmsTextAdvanceR
 	req.Header.Add("Authorization", auth)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
+
+	i.Page.Debug("infobip.send-sms", diary.M{
+		"method": "POST",
+		"uri":    uri,
+		"body":   request,
+		"headers": map[string][]string{
+			"Authorization": {auth},
+		},
+	})
 
 	/* Execute Request */
 	body, statusCode, err := executeRequest(client, req)

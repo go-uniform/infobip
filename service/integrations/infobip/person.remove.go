@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-diary/diary"
 	"net/http"
 	"net/url"
 	"strings"
@@ -80,6 +81,15 @@ func (i *infobip) PersonRemove(request PersonRemoveQueryRequest) PersonRemoveRes
 		fmt.Println(err)
 	}
 	req.Header.Add("Authorization", auth)
+
+	i.Page.Debug("infobip.person-remove", diary.M{
+		"method": "POST",
+		"uri":    uri,
+		"body":   request,
+		"headers": map[string][]string{
+			"Authorization": {auth},
+		},
+	})
 
 	/* Execute Request */
 	body, statusCode, err := executeRequest(client, req)
