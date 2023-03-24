@@ -122,12 +122,17 @@ func (i *infobip) PersonCreate(request PersonCreateRequest) PersonCreateResponse
 		},
 	})
 
-	/* Execute Request */
-	body, statusCode, err := executeRequest(client, req)
-
 	/* Handle Response */
 	var personCreateResponse PersonCreateResponse
 	var responseErr error
+
+	if i.Virtual {
+		printRequest(client, req)
+		return personCreateResponse
+	}
+
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
 	if statusCode != 200 {
 		var personCreateError PersonCreateError

@@ -156,12 +156,17 @@ func (i *infobip) SendEmail(request EmailSendRequest) EmailSendResponse {
 		},
 	})
 
-	/* Execute Request */
-	body, statusCode, err := executeRequest(client, req)
-
 	/* Handle Response */
 	var emailSendResponse EmailSendResponse
 	var responseErr error
+
+	if i.Virtual {
+		printRequest(client, req)
+		return emailSendResponse
+	}
+
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
 	if statusCode != 200 {
 		var emailSendError EmailSendError

@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="run" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <configuration default="false" name="commands:sms.send" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="commands">
     <module name="infobip" />
     <working_directory value="$PROJECT_DIR$" />
-    <parameters value="run --uri https://1l2c3.api-us.infobip.com --apiKey 003026bbc133714df1834b8638bb496e-8f4b3d9a-e931-478d-a994-28a725159ab9 --virtual" />
+    <parameters value="command:sms.send -t +27721234567" />
     <kind value="PACKAGE" />
     <package value="service" />
     <directory value="$PROJECT_DIR$" />

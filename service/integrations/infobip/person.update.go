@@ -130,12 +130,17 @@ func (i *infobip) PersonUpdate(request PersonUpdateRequest, queryRequest PersonU
 		},
 	})
 
-	/* Execute Request */
-	body, statusCode, err := executeRequest(client, req)
-
 	/* Handle Response */
 	var personUpdateResponse PersonUpdateResponse
 	var responseErr error
+
+	if i.Virtual {
+		printRequest(client, req)
+		return personUpdateResponse
+	}
+
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
 	if statusCode != 200 {
 		var personUpdateError PersonUpdateError

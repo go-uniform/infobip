@@ -1,6 +1,8 @@
 package infobip
 
-import "github.com/go-diary/diary"
+import (
+	"github.com/go-diary/diary"
+)
 
 /* Infobip API
 
@@ -11,6 +13,7 @@ type infobip struct {
 	Page    diary.IPage
 	BaseUri string
 	ApiKey  string
+	Virtual bool
 }
 
 type IInfobip interface {
@@ -21,13 +24,14 @@ type IInfobip interface {
 	SendEmail(request EmailSendRequest) EmailSendResponse
 }
 
-func NewInfobipConnector(page diary.IPage, baseUri, apiKey string) IInfobip {
+func NewInfobipConnector(page diary.IPage, baseUri, apiKey string, virtual bool) IInfobip {
 	var instance IInfobip
 	page.Scope("mongo", func(p diary.IPage) {
 		instance = &infobip{
 			Page:    page,
 			BaseUri: baseUri,
 			ApiKey:  apiKey,
+			Virtual: virtual,
 		}
 	})
 	return instance

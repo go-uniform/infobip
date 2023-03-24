@@ -91,12 +91,17 @@ func (i *infobip) PersonRemove(request PersonRemoveQueryRequest) PersonRemoveRes
 		},
 	})
 
-	/* Execute Request */
-	body, statusCode, err := executeRequest(client, req)
-
 	/* Handle Response */
 	var personRemoveResponse PersonRemoveResponse
 	var responseErr error
+
+	if i.Virtual {
+		printRequest(client, req)
+		return personRemoveResponse
+	}
+
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
 	if statusCode != 200 {
 		var personRemoveError PersonRemoveError

@@ -15,6 +15,7 @@ func init() {
 	var test bool
 	var uri string
 	var apiKey string
+	var virtual bool
 
 	var runCmd = &cobra.Command{
 		Use:   "run",
@@ -31,8 +32,9 @@ func init() {
 				"limit":      limit,
 				"test":       test,
 
-				"uri":    uri,
-				"apiKey": apiKey,
+				"uri":     uri,
+				"apiKey":  apiKey,
+				"virtual": virtual,
 			})
 		},
 	}
@@ -44,6 +46,7 @@ func init() {
 	runCmd.Flags().BoolVar(&test, "test", false, "A flag indicating if service should enter into test mode")
 	runCmd.Flags().StringVar(&uri, "uri", "", "The Infobip API BaseURI")
 	runCmd.Flags().StringVar(&apiKey, "apiKey", "", "The Infobip API Key")
+	runCmd.Flags().BoolVar(&virtual, "virtual", false, "A flag indicating if service should enter into virtual mode, in this mode service will not post to infobip but will print out the post to the logs instead.")
 
 	if err := runCmd.MarkFlagRequired("uri"); err != nil {
 		panic(err)

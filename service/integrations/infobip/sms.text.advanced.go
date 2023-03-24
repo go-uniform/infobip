@@ -166,12 +166,17 @@ func (i *infobip) SmsTextAdvanced(request SmsTextAdvanceRequest) SmsTextAdvanceR
 		},
 	})
 
-	/* Execute Request */
-	body, statusCode, err := executeRequest(client, req)
-
 	/* Handle Response */
 	var smsTextAdvanceResponse SmsTextAdvanceResponse
 	var responseErr error
+
+	if i.Virtual {
+		printRequest(client, req)
+		return smsTextAdvanceResponse
+	}
+
+	/* Execute Request */
+	body, statusCode, err := executeRequest(client, req)
 
 	if statusCode != 200 {
 		var smsTextAdvanceError SmsTextAdvanceError

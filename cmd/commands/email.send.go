@@ -26,7 +26,7 @@ func init() {
 		})
 	}, "Send an email message to a target email address via CLI")
 
-	cmd.Flags().StringVarP(&from, "from", "f", "noreply@uprate.co.za", "The from email address to be used when sending the email")
+	cmd.Flags().StringVarP(&from, "from", "f", "noreply@uniform.co.za", "The from email address to be used when sending the email")
 	cmd.Flags().StringVarP(&to, "to", "t", "", "The destination email address(es) to send the email to.")
 	cmd.Flags().StringVarP(&subject, "subject", "s", "Test", "The message subject for the email to be sent.")
 	cmd.Flags().StringVarP(&body, "body", "b", "Toto, I've got a feeling we're not in Kansas anymore.", "The message body for the email to be sent.")

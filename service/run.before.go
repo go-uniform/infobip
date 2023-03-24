@@ -16,9 +16,14 @@ func RunBefore(shutdown chan bool, group *sync.WaitGroup, p diary.IPage) {
 	if !ok {
 		panic("mongo authSource must be a string")
 	}
+	virtual, ok := info.Args["virtual"].(bool)
+	if !ok {
+		virtual = false
+	}
 
 	info.Uri = uri
 	info.ApiKey = apiKey
+	info.Virtual = virtual
 
-	info.Infobip = infobip.NewInfobipConnector(p, uri, apiKey)
+	info.Infobip = infobip.NewInfobipConnector(p, uri, apiKey, virtual)
 }

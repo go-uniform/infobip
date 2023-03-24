@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="commands:ping" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="commands">
-    <module name="base-service" />
+  <configuration default="false" name="commands:email.send" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="commands">
+    <module name="infobip" />
     <working_directory value="$PROJECT_DIR$" />
-    <parameters value="command:ping" />
+    <parameters value="command:email.send -t mcswitch@uniform.co.za" />
     <kind value="PACKAGE" />
     <package value="service" />
     <directory value="$PROJECT_DIR$" />
