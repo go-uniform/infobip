@@ -6,6 +6,7 @@ import (
 	"service/service/_base"
 	"service/service/info"
 	"service/service/integrations/infobip"
+	"service/service/models"
 )
 
 func init() {
@@ -13,18 +14,12 @@ func init() {
 }
 
 func emailSend(r uniform.IRequest, p diary.IPage) {
-	var model struct {
-		From        string        `bson:"from"`
-		To          []string      `bson:"to"`
-		Cc          []string      `bson:"cc"`
-		Bcc         []string      `bson:"bcc"`
-		Subject     string        `bson:"subject"`
-		Body        string        `bson:"body"`
-		Attachments []interface{} `bson:"attachments"`
-	}
+	var model models.EmailSend
 	r.Read(&model)
 
-	p.Notice("email.send", nil)
+	p.Notice("email.send", diary.M{
+		"model": model,
+	})
 
 	if info.TestMode {
 		p.Notice("email.send.test-mode", diary.M{

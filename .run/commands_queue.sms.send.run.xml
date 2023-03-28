@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="commands:queue.sms.send" type="GoApplicationRunConfiguration" factoryName="Go Application" folderName="commands">
+    <module name="infobip" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="command:queue.sms.send -t +27721234567" />
+    <kind value="PACKAGE" />
+    <package value="service" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/main.go" />
+    <method v="2">
+      <option name="GoBeforeRunTask" command="generate" />
+    </method>
+  </configuration>
+</component>

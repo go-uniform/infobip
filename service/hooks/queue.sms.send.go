@@ -1,22 +1,18 @@
-package commands
+package hooks
 
 import (
 	"github.com/go-diary/diary"
 	"github.com/go-uniform/uniform"
 	"service/service/_base"
+	"service/service/models"
 )
 
 func init() {
-	_base.Subscribe(_base.TargetCommand("sms.send"), smsSend)
+	_base.Subscribe(_base.TargetEvent("queue", "sms.send"), queueSmsSend)
 }
 
-func smsSend(r uniform.IRequest, p diary.IPage) {
-	var model struct {
-		Queue bool     `bson:"queue"`
-		From  string   `bson:"from"`
-		To    []string `bson:"to"`
-		Text  string   `bson:"text"`
-	}
+func queueSmsSend(r uniform.IRequest, p diary.IPage) {
+	var model models.SmsSend
 	r.Read(&model)
 
 	if err := r.Conn().Request(p, _base.TargetAction("sms", "send"), r.Remainder(), uniform.Request{

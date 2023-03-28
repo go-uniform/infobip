@@ -6,6 +6,7 @@ import (
 	"service/service/_base"
 	"service/service/info"
 	"service/service/integrations/infobip"
+	"service/service/models"
 )
 
 func init() {
@@ -13,14 +14,12 @@ func init() {
 }
 
 func smsSend(r uniform.IRequest, p diary.IPage) {
-	var model struct {
-		From string   `bson:"from"`
-		To   []string `bson:"to"`
-		Text string   `bson:"text"`
-	}
+	var model models.SmsSend
 	r.Read(&model)
 
-	p.Notice("sms.send", nil)
+	p.Notice("sms.send", diary.M{
+		"model": model,
+	})
 
 	if info.TestMode {
 		p.Notice("sms.send.test-mode", diary.M{

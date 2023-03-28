@@ -4,7 +4,7 @@ import (
 	"github.com/go-diary/diary"
 	"github.com/go-uniform/uniform"
 	"service/service/_base"
-	"strings"
+	"service/service/models"
 )
 
 func init() {
@@ -12,24 +12,11 @@ func init() {
 }
 
 func emailSend(r uniform.IRequest, p diary.IPage) {
-	var params uniform.P
-	r.Read(&params)
+	var model models.EmailSend
+	r.Read(&model)
 
 	if err := r.Conn().Request(p, _base.TargetAction("email", "send"), r.Remainder(), uniform.Request{
-		Model: struct {
-			From        string        `bson:"from"`
-			To          []string      `bson:"to"`
-			Cc          []string      `bson:"cc"`
-			Bcc         []string      `bson:"bcc"`
-			Subject     string        `bson:"subject"`
-			Body        string        `bson:"body"`
-			Attachments []interface{} `bson:"attachments"`
-		}{
-			From:    params["from"],
-			To:      strings.Split(params["to"], ","),
-			Subject: params["subject"],
-			Body:    params["body"],
-		},
+		Model: model,
 	}, func(sub uniform.IRequest, _ diary.IPage) {
 		if sub.HasError() {
 			panic(sub.Error())

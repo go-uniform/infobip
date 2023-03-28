@@ -16,8 +16,8 @@ func init() {
 	var subject string
 	var body string
 
-	cmd := _base.Command("email.send", func(cmd *cobra.Command, args []string) {
-		service.Command("email.send", time.Minute, _base.NatsUri, _base.CompileNatsOptions(), map[string]interface{}{
+	cmd := _base.Command("queue.email.send", func(cmd *cobra.Command, args []string) {
+		service.Command("queue.email.send", time.Minute, _base.NatsUri, _base.CompileNatsOptions(), map[string]interface{}{
 			"from":    from,
 			"to":      strings.Split(to, ","),
 			"subject": subject,
@@ -25,7 +25,7 @@ func init() {
 		}, func(bytes []byte) {
 			fmt.Println(string(bytes))
 		})
-	}, "Send an email message to a target email address via CLI")
+	}, "Queue an email message via CLI")
 
 	cmd.Flags().StringVarP(&from, "from", "f", "noreply@uniform.co.za", "The from email address to be used when sending the email")
 	cmd.Flags().StringVarP(&to, "to", "t", "", "The destination email address(es) to send the email to.")

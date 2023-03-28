@@ -26,7 +26,7 @@ type IInfobip interface {
 
 func NewInfobipConnector(page diary.IPage, baseUri, apiKey string, virtual bool) IInfobip {
 	var instance IInfobip
-	page.Scope("mongo", func(p diary.IPage) {
+	page.Scope("infobip", func(p diary.IPage) {
 		instance = &infobip{
 			Page:    page,
 			BaseUri: baseUri,

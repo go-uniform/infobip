@@ -16,7 +16,7 @@ var executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, 
 	}
 
 	var body []byte = nil
-	if req.Method != "GET" {
+	if res.Body != nil {
 		defer res.Body.Close()
 		body, err = ioutil.ReadAll(res.Body)
 		if err != nil {

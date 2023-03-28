@@ -14,15 +14,15 @@ func init() {
 	var to string
 	var text string
 
-	cmd := _base.Command("sms.send", func(cmd *cobra.Command, args []string) {
-		service.Command("sms.send", time.Minute, _base.NatsUri, _base.CompileNatsOptions(), map[string]interface{}{
+	cmd := _base.Command("queue.sms.send", func(cmd *cobra.Command, args []string) {
+		service.Command("queue.sms.send", time.Minute, _base.NatsUri, _base.CompileNatsOptions(), map[string]interface{}{
 			"from": from,
 			"to":   strings.Split(to, ","),
 			"text": text,
 		}, func(bytes []byte) {
 			fmt.Println(string(bytes))
 		})
-	}, "Send an SMS message to a target mobile number via CLI")
+	}, "Queue an SMS message via CLI")
 
 	cmd.Flags().StringVarP(&from, "from", "f", "InfoSMS", "The from number, set this to InfoSMS to send from a long number.")
 	cmd.Flags().StringVarP(&to, "to", "t", "", "The destination mobile number(s) to send the SMS to.")
