@@ -1,14 +1,23 @@
 package infobip
 
 import (
-	"io/ioutil"
-	"net/http"
-	"testing"
+    "github.com/go-diary/diary"
+    "net/http"
+    "testing"
 )
 
+var d diary.IDiary = diary.Dear("client", "project", "appNmae", nil, "repo", "commit", []string{"version"}, nil, diary.LevelTrace, func(log diary.Log) {
+})
+var p diary.IPage
+
+func init() {
+    d.Page(-1, 1000, true, "appNmae", nil, "", "", nil, func(subPage diary.IPage) {
+        p = subPage
+    })
+}
 func TestInfobip_SendEmailSuccess(t *testing.T) {
-	/* Expected */
-	injectedResponseBody := `
+    /* Expected */
+    injectedResponseBody := `
 {
 	"messages": [
 		{
@@ -25,44 +34,35 @@ func TestInfobip_SendEmailSuccess(t *testing.T) {
 	]
 }
 `
-	/* Prepare */
-	defer func() {
-		// restore orig
-	}()
-	// inject scenario
-	var requestBody []byte
-	var err error
-	executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
-		// extract request body content for assertion
-		defer req.Body.Close()
-		requestBody, err = ioutil.ReadAll(req.Body)
-		if err != nil {
-			t.Error(err)
-		}
+    /* Prepare */
+    defer func() {
+        // restore orig
+    }()
+    // inject scenario
+    executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
+        return []byte(injectedResponseBody), 200, nil
+    }
 
-		return []byte(injectedResponseBody), 200, nil
-	}
+    /* Execute */
+    instance := NewInfobipConnector(p, "", "", false)
+    response := instance.SendEmail(EmailSendRequest{
+        To:      []string{"joan.doe0@example.com"},
+        From:    "noreply@uniform.co.za",
+        Subject: "Test",
+    })
 
-	/* Execute */
-	instance := NewInfobipConnector(nil, "", "")
-	response := instance.SendEmail(EmailSendRequest{
-		To:      []string{"joan.doe0@example.com"},
-		From:    "noreply@uniform.co.za",
-		Subject: "Test",
-	})
-
-	/* Assert */
-	if response.BulkId != "" {
-		// todo: error
-	}
-	if response.Messages == nil || len(response.Messages) != 1 {
-		// todo: error
-	}
+    /* Assert */
+    if response.BulkId != "" {
+        // todo: error
+    }
+    if response.Messages == nil || len(response.Messages) != 1 {
+        // todo: error
+    }
 }
 
 func TestInfobip_SmsTextAdvancedSuccess(t *testing.T) {
-	/* Expected */
-	injectedResponseBody := `
+    /* Expected */
+    injectedResponseBody := `
 {
 	"messages": 
 		[
@@ -73,50 +73,41 @@ func TestInfobip_SmsTextAdvancedSuccess(t *testing.T) {
 }
 `
 
-	/* Prepare */
-	defer func() {
-		// restore orig
-	}()
-	// inject scenario
-	var requestBody []byte
-	var err error
-	executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
-		// extract request body content for assertion
-		defer req.Body.Close()
-		requestBody, err = ioutil.ReadAll(req.Body)
-		if err != nil {
-			t.Error(err)
-		}
+    /* Prepare */
+    defer func() {
+        // restore orig
+    }()
+    // inject scenario
+    executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
+        return []byte(injectedResponseBody), 200, nil
+    }
 
-		return []byte(injectedResponseBody), 200, nil
-	}
+    /* Execute */
+    instance := NewInfobipConnector(p, "", "", false)
+    response := instance.SmsTextAdvanced(SmsTextAdvanceRequest{
+        Messages: []SmsTextAdvanceRequestMessage{
+            {
+                Destinations: []SmsTextAdvanceRequestMessageDestination{
+                    {
+                        To: "1234",
+                    },
+                },
+            },
+        },
+    })
 
-	/* Execute */
-	instance := NewInfobipConnector(nil, "", "")
-	response := instance.SmsTextAdvanced(SmsTextAdvanceRequest{
-		Messages: []SmsTextAdvanceRequestMessage{
-			{
-				Destinations: []SmsTextAdvanceRequestMessageDestination{
-					{
-						To: "1234",
-					},
-				},
-			},
-		},
-	})
-
-	/* Assert */
-	if response.BulkId != "" {
-		// todo: error
-	}
-	if response.Messages == nil || len(response.Messages) != 1 {
-		// todo: error
-	}
+    /* Assert */
+    if response.BulkId != "" {
+        // todo: error
+    }
+    if response.Messages == nil || len(response.Messages) != 1 {
+        // todo: error
+    }
 }
 
 func TestInfobip_PersonCreateSuccess(t *testing.T) {
-	/* Expected */
-	injectedResponseBody := `
+    /* Expected */
+    injectedResponseBody := `
 {
 	"contactInformation": {
 		"email": [
@@ -128,79 +119,61 @@ func TestInfobip_PersonCreateSuccess(t *testing.T) {
 }
 `
 
-	/* Prepare */
-	defer func() {
-		// restore orig
-	}()
-	// inject scenario
-	var requestBody []byte
-	var err error
-	executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
-		// extract request body content for assertion
-		defer req.Body.Close()
-		requestBody, err = ioutil.ReadAll(req.Body)
-		if err != nil {
-			t.Error(err)
-		}
+    /* Prepare */
+    defer func() {
+        // restore orig
+    }()
+    // inject scenario
+    executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
+        return []byte(injectedResponseBody), 200, nil
+    }
 
-		return []byte(injectedResponseBody), 200, nil
-	}
+    /* Execute */
+    instance := NewInfobipConnector(p, "", "", false)
+    response := instance.PersonCreate(PersonCreateRequest{
+        ContactInformation: ContactInformation{
+            Email: []Email{
+                {
+                    Address: "janewilliams@acme.com",
+                },
+            },
+        },
+    })
 
-	/* Execute */
-	instance := NewInfobipConnector(nil, "", "")
-	response := instance.PersonCreate(PersonCreateRequest{
-		ContactInformation: ContactInformation{
-			Email: []Email{
-				{
-					Address: "janewilliams@acme.com",
-				},
-			},
-		},
-	})
-
-	/* Assert */
-	if response.ContactInformation.Email == nil {
-		// todo: error
-	}
+    /* Assert */
+    if response.ContactInformation.Email == nil {
+        // todo: error
+    }
 }
 
 func TestInfobip_PersonUpdateSuccess(t *testing.T) {
-	//todo: write test
+    //todo: write test
 }
 
 func TestInfobip_PersonRemoveSuccess(t *testing.T) {
-	/* Expected */
-	injectedResponseBody := `
+    /* Expected */
+    injectedResponseBody := `
 {
 	"phone": "1234"
 }
 `
-	/* Prepare */
-	defer func() {
-		// restore orig
-	}()
-	// inject scenario
-	var requestBody []byte
-	var err error
-	executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
-		// extract request body content for assertion
-		defer req.Body.Close()
-		requestBody, err = ioutil.ReadAll(req.Body)
-		if err != nil {
-			t.Error(err)
-		}
+    /* Prepare */
+    defer func() {
+        // restore orig
+    }()
+    // inject scenario
+    executeRequest = func(client *http.Client, req *http.Request) ([]byte, int, error) {
+        return []byte(injectedResponseBody), 200, nil
+    }
 
-		return []byte(injectedResponseBody), 200, nil
-	}
+    /* Execute */
+    instance := NewInfobipConnector(p, "", "", false)
+    response := instance.PersonRemove(PersonRemoveQueryRequest{
+        Phone: "1234",
+    })
 
-	/* Execute */
-	instance := NewInfobipConnector(nil, "", "")
-	response := instance.PersonRemove(PersonRemoveQueryRequest{
-		Phone: "1234",
-	})
-
-	/* Assert */
-	if response != "" {
-		// todo: error
-	}
+    /* Assert */
+    if response != "" {
+        // todo: error
+    }
 }
