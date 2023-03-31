@@ -9,6 +9,7 @@ import (
 	// load all actions, commands, events, hooks, entities and integrations
 	_ "service/service/actions"
 	_ "service/service/commands"
+	_ "service/service/endpoints"
 	_ "service/service/entities"
 	_ "service/service/events"
 	_ "service/service/hooks"

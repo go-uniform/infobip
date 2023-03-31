@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/go-diary/diary"
 	"github.com/go-uniform/uniform"
+	"net/http"
 	"service/service/_base"
 	"service/service/info"
 	"service/service/integrations/infobip"
@@ -34,6 +35,38 @@ func RunBefore(shutdown chan bool, group *sync.WaitGroup, p diary.IPage) {
 	for _, queue := range queues {
 		if err := info.Conn.Request(p, _base.TargetAction("queue", "create"), time.Second*10, uniform.Request{
 			Model: queue,
+		}, func(r uniform.IRequest, p diary.IPage) {
+			if r.HasError() {
+				panic(r.Error())
+			}
+			if r.CanReply() {
+				if err := r.Reply(uniform.Request{}); err != nil {
+					p.Error("reply", err.Error(), diary.M{
+						"err": err,
+					})
+				}
+			}
+		}); err != nil {
+			panic(err)
+		}
+	}
+
+	var endpoints = []struct {
+		Timeout time.Duration
+		Path    string
+		Method  string
+		Topic   string
+	}{
+		{
+			Timeout: time.Minute,
+			Path:    "/email/send",
+			Method:  http.MethodPost,
+			Topic:   "endpoints.post.email.send",
+		},
+	}
+	for _, endpoint := range endpoints {
+		if err := info.Conn.Request(p, _base.TargetAction("api", "bind"), time.Second*10, uniform.Request{
+			Model: endpoint,
 		}, func(r uniform.IRequest, p diary.IPage) {
 			if r.HasError() {
 				panic(r.Error())
