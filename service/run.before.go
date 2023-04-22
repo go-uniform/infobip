@@ -58,7 +58,7 @@ func RunBefore(shutdown chan bool, group *sync.WaitGroup, p diary.IPage) {
 		Topic   string
 	}{
 		{
-			Timeout: time.Minute,
+			Timeout: time.Second * 5,
 			Path:    "/email/send",
 			Method:  http.MethodPost,
 			Topic:   "endpoints.post.email.send",
